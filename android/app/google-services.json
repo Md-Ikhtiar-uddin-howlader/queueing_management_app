@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "440810851716",
+    "project_id": "finalprojectma-e8f14",
+    "storage_bucket": "finalprojectma-e8f14.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:440810851716:android:65d193cdb5c24a553f21d1",
+        "android_client_info": {
+          "package_name": "com.example.queueing_management_app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyATZ_TqjibgqECRuO_Fqhk-_xJ3mUAUifk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
