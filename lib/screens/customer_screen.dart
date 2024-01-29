@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'qr_scanner_page.dart';
+import 'qr_scanner_page.dart'; // Import your QR page file
 import 'dynamic_qr_scanner_page.dart';
 
 class CustomerScreen extends StatefulWidget {
@@ -20,6 +20,12 @@ class _CustomerScreenState extends State<CustomerScreen> {
     return Scaffold(
       appBar: AppBar(
         title: Text('Customer Screen'),
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back),
+          onPressed: () {
+            Navigator.pop(context);
+          },
+        ),
       ),
       body: Center(
         child: Padding(
