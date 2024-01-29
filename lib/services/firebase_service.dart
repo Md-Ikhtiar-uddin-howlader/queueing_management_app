@@ -10,47 +10,36 @@ class FirebaseService {
   // Firebase Authentication
   Future<User?> signInWithEmailAndPassword(
       String email, String password) async {
-    try {
-      UserCredential userCredential = await _auth.signInWithEmailAndPassword(
-        email: email,
-        password: password,
-      );
-      return userCredential.user;
-    } catch (e) {
-      print('Error signing in: $e');
-      return null;
-    }
+    UserCredential userCredential = await _auth.signInWithEmailAndPassword(
+      email: email,
+      password: password,
+    );
+    return userCredential.user;
   }
 
   // Firebase Cloud Firestore
   Future<void> addCustomerToQueue(
       String customerId, String customerName) async {
-    try {
-      await _firestore.collection('queue').doc(customerId).set({
-        'name': customerName,
-        'queueNumber':
-            FieldValue.serverTimestamp(), // Add your queue number logic here
-      });
-    } catch (e) {
-      print('Error adding customer to queue: $e');
-    }
+    await _firestore.collection('queue').doc(customerId).set({
+      'name': customerName,
+      'queueNumber':
+          FieldValue.serverTimestamp(), // Add your queue number logic here
+    });
   }
-
+}
   // Firebase Cloud Messaging
-  Future<void> sendPushNotification(String customerId, String message) async {
-    try {
-      await _firebaseMessaging.subscribeToTopic(customerId);
-      await _firebaseMessaging.sendMessage(
-        to: '/topics/$customerId',
-        data: <String, String>{
+ /* Future<void> sendPushNotification(String customerId, String message) async {
+    await _firebaseMessaging.subscribeToTopic(customerId);
+    await _firebaseMessaging.send(
+      Message(
+        data: {
           'title': 'Queue Update',
           'body': message,
         },
-      );
-    } catch (e) {
-      print('Error sending push notification: $e');
-    }
+        topic: customerId,
+      ),
+    );
   }
 
   // Other Firebase-related methods can be added based on your app's requirements
-}
+*/
