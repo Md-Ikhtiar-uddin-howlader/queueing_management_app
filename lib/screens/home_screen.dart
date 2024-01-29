@@ -3,6 +3,7 @@ import 'package:queueing_management_app/screens/counter_screen.dart';
 import 'auth_screen.dart';
 import 'queue_page.dart';
 import 'customer_screen.dart'; // Import the CustomerScreen
+import 'register_screen.dart'; // Import the CustomerScreen
 
 class HomeScreen extends StatelessWidget {
   @override
@@ -15,17 +16,6 @@ class HomeScreen extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            ElevatedButton(
-              onPressed: () {
-                Navigator.pushReplacement(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => AuthScreen(userRole: 'counter'),
-                  ),
-                );
-              },
-              child: Text('I am a Counter'),
-            ),
             SizedBox(height: 20.0),
             ElevatedButton(
               onPressed: () {
@@ -42,14 +32,14 @@ class HomeScreen extends StatelessWidget {
             SizedBox(height: 20.0),
             ElevatedButton(
               onPressed: () {
-                Navigator.pushReplacement(
+                Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => AuthScreen(userRole: 'customer'),
+                    builder: (context) => AuthScreen(),
                   ),
                 );
               },
-              child: Text('I am a Customer'),
+              child: Text('Log In'),
             ),
             SizedBox(height: 20.0),
             ElevatedButton(
@@ -58,11 +48,11 @@ class HomeScreen extends StatelessWidget {
                   context,
                   MaterialPageRoute(
                     builder: (context) =>
-                        CustomerScreen(), // Navigate to CustomerScreen
+                        RegisterScreen(), // Navigate to CustomerScreen
                   ),
                 );
               },
-              child: Text('Go to Customer Screen'), // Add a button for testing
+              child: Text('Register as Customer'), // Add a button for testing
             ),
           ],
         ),

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class DynamicQRScannerPage extends StatefulWidget {
   @override
@@ -41,13 +42,20 @@ class _DynamicQRScannerPageState extends State<DynamicQRScannerPage> {
 
   void _onQRViewCreated(QRViewController controller) {
     this.controller = controller;
-    controller.scannedDataStream.listen((scanData) {
+    controller.scannedDataStream.listen((scanData) async {
       String qrData = scanData.code ?? '';
       print('Scanned QR Code: $qrData'); // Print for testing
 
       if (!isQueueJoined) {
-        _assignQueueToUser(fixedCustomerId, qrData);
-        isQueueJoined = true;
+        User? user = FirebaseAuth.instance.currentUser;
+
+        if (user != null) {
+          String userUid = user.uid;
+          _assignQueueToUser(userUid, qrData);
+          isQueueJoined = true;
+        } else {
+          print('User not authenticated');
+        }
       }
     });
   }

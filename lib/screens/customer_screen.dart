@@ -4,6 +4,10 @@ import 'qr_scanner_page.dart';
 import 'dynamic_qr_scanner_page.dart';
 
 class CustomerScreen extends StatefulWidget {
+  final String userUid;
+
+  CustomerScreen({required this.userUid});
+
   @override
   _CustomerScreenState createState() => _CustomerScreenState();
 }
@@ -23,12 +27,11 @@ class _CustomerScreenState extends State<CustomerScreen> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              SizedBox(height: 20.0),
               // Displaying the user's queue number
               StreamBuilder(
                 stream: _firestore
                     .collection('Queue')
-                    .where('userid', isEqualTo: '1')
+                    .where('userid', isEqualTo: widget.userUid)
                     .orderBy('timestamp', descending: true)
                     .snapshots(),
                 builder: (context, userSnapshot) {

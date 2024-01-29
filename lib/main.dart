@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'screens/home_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
+import 'package:queueing_management_app/screens/customer_screen.dart'; // Import the CustomerScreen
+import 'package:queueing_management_app/screens/counter_screen.dart'; // Import the CustomerScreen
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -18,6 +20,8 @@ class MyApp extends StatelessWidget {
       initialRoute: '/home',
       routes: {
         '/home': (context) => HomeScreen(),
+        '/counter': (context) => CounterScreen(),
+        '/customer': (context) => CustomerScreen(userUid: ''),
       },
     );
   }
