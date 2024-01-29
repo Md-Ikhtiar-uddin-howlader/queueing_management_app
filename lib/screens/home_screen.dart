@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:queueing_management_app/screens/counter_screen.dart';
 import 'auth_screen.dart';
 import 'queue_page.dart';
-import 'customer_screen.dart'; // Import the CustomerScreen
+import 'customer_screen.dart';
 import 'package:queueing_management_app/services/firebase_service.dart';
 
 class HomeScreen extends StatelessWidget {
