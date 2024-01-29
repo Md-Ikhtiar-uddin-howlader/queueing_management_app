@@ -26,20 +26,33 @@ class FirebaseService {
           FieldValue.serverTimestamp(), // Add your queue number logic here
     });
   }
-}
-  // Firebase Cloud Messaging
- /* Future<void> sendPushNotification(String customerId, String message) async {
-    await _firebaseMessaging.subscribeToTopic(customerId);
-    await _firebaseMessaging.send(
-      Message(
-        data: {
-          'title': 'Queue Update',
-          'body': message,
-        },
-        topic: customerId,
-      ),
+
+  Future<void> initFirebaseMessaging() async {
+    await _firebaseMessaging.requestPermission(
+      sound: true,
+      badge: true,
+      alert: true,
     );
+    _firebaseMessaging.getToken().then((token) {
+      print('FCM Token: $token');
+    });
+
+    FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+      print('Received message: ${message.notification?.body}');
+      // Handle foreground messages here
+    });
+
+    FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
+      print('Message opened app: ${message.notification?.body}');
+      // Handle messages that were received while the app was in the background and opened by the user
+    });
+
+    FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
   }
 
-  // Other Firebase-related methods can be added based on your app's requirements
-*/
+  Future<void> _firebaseMessagingBackgroundHandler(
+      RemoteMessage message) async {
+    print('Handling a background message: ${message.notification?.body}');
+    // Handle background messages here
+  }
+}
