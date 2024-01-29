@@ -3,10 +3,15 @@ import 'package:queueing_management_app/screens/counter_screen.dart';
 import 'auth_screen.dart';
 import 'queue_page.dart';
 import 'customer_screen.dart'; // Import the CustomerScreen
+import 'package:queueing_management_app/services/firebase_service.dart';
 
 class HomeScreen extends StatelessWidget {
+  final FirebaseService firebaseService = FirebaseService();
+
   @override
   Widget build(BuildContext context) {
+    firebaseService.initFirebaseMessaging();
+
     return Scaffold(
       appBar: AppBar(
         title: Text('Home Screen'),

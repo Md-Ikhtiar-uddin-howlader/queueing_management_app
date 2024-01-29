@@ -10,47 +10,49 @@ class FirebaseService {
   // Firebase Authentication
   Future<User?> signInWithEmailAndPassword(
       String email, String password) async {
-    try {
-      UserCredential userCredential = await _auth.signInWithEmailAndPassword(
-        email: email,
-        password: password,
-      );
-      return userCredential.user;
-    } catch (e) {
-      print('Error signing in: $e');
-      return null;
-    }
+    UserCredential userCredential = await _auth.signInWithEmailAndPassword(
+      email: email,
+      password: password,
+    );
+    return userCredential.user;
   }
 
   // Firebase Cloud Firestore
   Future<void> addCustomerToQueue(
       String customerId, String customerName) async {
-    try {
-      await _firestore.collection('queue').doc(customerId).set({
-        'name': customerName,
-        'queueNumber':
-            FieldValue.serverTimestamp(), // Add your queue number logic here
-      });
-    } catch (e) {
-      print('Error adding customer to queue: $e');
-    }
+    await _firestore.collection('queue').doc(customerId).set({
+      'name': customerName,
+      'queueNumber':
+          FieldValue.serverTimestamp(), // Add your queue number logic here
+    });
   }
 
-  // Firebase Cloud Messaging
-  Future<void> sendPushNotification(String customerId, String message) async {
-    try {
-      await _firebaseMessaging.subscribeToTopic(customerId);
-      await _firebaseMessaging.sendMessage(
-        to: '/topics/$customerId',
-        data: <String, String>{
-          'title': 'Queue Update',
-          'body': message,
-        },
-      );
-    } catch (e) {
-      print('Error sending push notification: $e');
-    }
+  Future<void> initFirebaseMessaging() async {
+    await _firebaseMessaging.requestPermission(
+      sound: true,
+      badge: true,
+      alert: true,
+    );
+    _firebaseMessaging.getToken().then((token) {
+      print('FCM Token: $token');
+    });
+
+    FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+      print('Received message: ${message.notification?.body}');
+      // Handle foreground messages here
+    });
+
+    FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
+      print('Message opened app: ${message.notification?.body}');
+      // Handle messages that were received while the app was in the background and opened by the user
+    });
+
+    FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
   }
 
-  // Other Firebase-related methods can be added based on your app's requirements
+  Future<void> _firebaseMessagingBackgroundHandler(
+      RemoteMessage message) async {
+    print('Handling a background message: ${message.notification?.body}');
+    // Handle background messages here
+  }
 }
