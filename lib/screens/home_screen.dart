@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'auth_screen.dart';
-import 'counter_screen.dart';
-import 'customer_screen.dart';
 import 'register_screen.dart';
 
 class HomeScreen extends StatelessWidget {
@@ -15,18 +13,6 @@ class HomeScreen extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            SizedBox(height: 20.0),
-            ElevatedButton(
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => CounterScreen(),
-                  ),
-                );
-              },
-              child: Text('Go to Counter Screen'),
-            ),
             SizedBox(height: 20.0),
             ElevatedButton(
               onPressed: () {

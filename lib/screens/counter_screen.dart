@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'qr_scanner_page.dart'; // Import your QR page file
 import 'queue_qr_page.dart'; // Import your QR page file
 
 class CounterScreen extends StatefulWidget {
@@ -55,7 +54,13 @@ class _CounterScreenState extends State<CounterScreen> {
 
         print('Called the next incomplete number.');
       } else {
+        // No incomplete queue entry found.
         print('No incomplete queue entry found.');
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('No queue available.'),
+          ),
+        );
       }
     } catch (error) {
       print('Error calling the next incomplete number: $error');

@@ -92,12 +92,14 @@ class _DynamicQRScannerPageState extends State<DynamicQRScannerPage> {
 
       if (queueExistSnapshot.docs.isNotEmpty) {
         _showSnackbar('You are already in the queue.');
+        Navigator.pop(context);
         return;
       }
 
       if (existingQueueSnapshot.docs.isNotEmpty) {
         // A document with the same queue number and 'incomplete' status already exists
         _showSnackbar('Queue number $parsedQueueNumber is already assigned');
+        Navigator.pop(context);
       } else {
         // No document with the same queue number found, proceed to add a new document
         await FirebaseFirestore.instance.collection('Queue').add({
@@ -117,6 +119,7 @@ class _DynamicQRScannerPageState extends State<DynamicQRScannerPage> {
     } catch (error) {
       print('Error assigning queue to user: $error');
       _showSnackbar('Error assigning the queue. Please try again.');
+      Navigator.pop(context);
     } finally {
       controller.resumeCamera();
     }

@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'home_screen.dart';
-import 'counter_screen.dart';
 import 'customer_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
