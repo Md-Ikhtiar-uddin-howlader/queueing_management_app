@@ -65,12 +65,25 @@ class _CustomerScreenState extends State<CustomerScreen> {
                   int userQueueNumber = userSnapshot.data!.docs.first['queue'];
                   bool isUserTurn =
                       userSnapshot.data!.docs.first['status'] == 'current';
+                  bool isQueueCompleted =
+                      userSnapshot.data!.docs.first['status'] == 'complete';
+                  print('Status: ${userSnapshot.data!.docs.first['status']}');
 
                   return Column(
                     children: [
                       if (isUserTurn)
                         Text(
                           'It\'s your turn now!',
+                          style: TextStyle(
+                            fontSize: 18.0,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.green,
+                          ),
+                        ),
+                      SizedBox(height: 20.0),
+                      if (isQueueCompleted)
+                        Text(
+                          'Your turn is completed!',
                           style: TextStyle(
                             fontSize: 18.0,
                             fontWeight: FontWeight.bold,

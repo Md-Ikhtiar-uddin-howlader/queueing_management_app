@@ -12,7 +12,6 @@ class _DynamicQRScannerPageState extends State<DynamicQRScannerPage> {
   final GlobalKey qrKey = GlobalKey(debugLabel: 'QR');
   late QRViewController controller;
   bool isQueueJoined = false;
-  final String fixedCustomerId = '1';
 
   @override
   Widget build(BuildContext context) {
@@ -51,6 +50,7 @@ class _DynamicQRScannerPageState extends State<DynamicQRScannerPage> {
 
         if (user != null) {
           String userUid = user.uid;
+          print('Current UID: $userUid'); // Print current UID
           _assignQueueToUser(userUid, qrData);
           isQueueJoined = true;
         } else {
@@ -73,6 +73,27 @@ class _DynamicQRScannerPageState extends State<DynamicQRScannerPage> {
           .collection('Queue')
           .where('queue', isEqualTo: parsedQueueNumber)
           .get();
+
+      QuerySnapshot currentQueueSnapshot =
+          await FirebaseFirestore.instance.collection('Queue').get();
+
+      int currentQueueSize = currentQueueSnapshot.size;
+
+      // Check if the queue has reached the maximum limit (e.g., 100)
+      if (currentQueueSize >= 100) {
+        _showSnackbar('The queue is full. Please try again later.');
+        return;
+      }
+
+      QuerySnapshot queueExistSnapshot = await FirebaseFirestore.instance
+          .collection('Queue')
+          .where('userid', isEqualTo: customerId)
+          .where('status', whereIn: ['incomplete', 'current']).get();
+
+      if (queueExistSnapshot.docs.isNotEmpty) {
+        _showSnackbar('You are already in the queue.');
+        return;
+      }
 
       if (existingQueueSnapshot.docs.isNotEmpty) {
         // A document with the same queue number and 'incomplete' status already exists

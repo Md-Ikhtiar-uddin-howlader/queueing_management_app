@@ -44,19 +44,24 @@ class _QRScannerPageState extends State<QRScannerPage> {
 
   void _onQRViewCreated(QRViewController controller) {
     this.controller = controller;
-    controller.scannedDataStream.listen((scanData) {
+    controller.scannedDataStream.listen((scanData) async {
       // Extract the QR code data from the Barcode instance
-      String barcodeData =
-          scanData.code ?? ''; // Provide an empty string as a default
+      String barcodeData = scanData.code ?? '';
+
+      // Print the raw scanned data
+      print('Raw Scanned Data: $barcodeData');
 
       // Handle the scanned data
-      if (barcodeData.toLowerCase().trim() == 'join queue' && !isQueueJoined) {
+      if (barcodeData.trim().toLowerCase() == 'join queue' && !isQueueJoined) {
+        // If the scanned data is 'join queue' and the queue is not already joined
         _joinQueue();
         isQueueJoined =
             true; // Set the flag to true to prevent multiple executions
-      } else {
-        print('Incorrect QR code. Try again. Scanned data: $barcodeData');
+      }
+      if (barcodeData.trim().toLowerCase() != 'join queue') {
         controller.pauseCamera();
+        _showSnackbar('Wrong QR Code');
+        Navigator.pop(context);
       }
     });
   }
@@ -79,6 +84,18 @@ class _QRScannerPageState extends State<QRScannerPage> {
         // Check if the queue has reached the maximum limit (e.g., 100)
         if (currentQueueSize >= 100) {
           _showSnackbar('The queue is full. Please try again later.');
+          return;
+        }
+
+        // Check if the user is already in the queue with status "incomplete" or "current"
+        QuerySnapshot existingQueueSnapshot = await FirebaseFirestore.instance
+            .collection('Queue')
+            .where('userid', isEqualTo: customerUid)
+            .where('status', whereIn: ['incomplete', 'current']).get();
+
+        if (existingQueueSnapshot.docs.isNotEmpty) {
+          _showSnackbar('You are already in the queue.');
+          Navigator.pop(context);
           return;
         }
 

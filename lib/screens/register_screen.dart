@@ -67,7 +67,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     'email': email,
                     'userRole': userRole,
                   });
-
                   Navigator.pushReplacementNamed(context, '/home');
                 } catch (e) {
                   print('Error during registration: $e');
