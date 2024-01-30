@@ -1,19 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:queueing_management_app/screens/counter_screen.dart';
 import 'auth_screen.dart';
-import 'queue_page.dart';
-import 'customer_screen.dart'; // Import the CustomerScreen
-import 'register_screen.dart'; // Import the CustomerScreen
+import 'counter_screen.dart';
 import 'customer_screen.dart';
-import 'package:queueing_management_app/services/firebase_service.dart';
+import 'register_screen.dart';
 
 class HomeScreen extends StatelessWidget {
-  final FirebaseService firebaseService = FirebaseService();
-
   @override
   Widget build(BuildContext context) {
-    firebaseService.initFirebaseMessaging();
-
     return Scaffold(
       appBar: AppBar(
         title: Text('Home Screen'),
@@ -28,12 +21,11 @@ class HomeScreen extends StatelessWidget {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) =>
-                        CounterScreen(), // Navigate to CustomerScreen
+                    builder: (context) => CounterScreen(),
                   ),
                 );
               },
-              child: Text('Go to Counter Screen'), // Add a button for testing
+              child: Text('Go to Counter Screen'),
             ),
             SizedBox(height: 20.0),
             ElevatedButton(
@@ -41,11 +33,11 @@ class HomeScreen extends StatelessWidget {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => AuthScreen(),
+                    builder: (context) => AuthScreen(counter: false),
                   ),
                 );
               },
-              child: Text('Log In'),
+              child: Text('Log In as Customer'),
             ),
             SizedBox(height: 20.0),
             ElevatedButton(
@@ -53,12 +45,35 @@ class HomeScreen extends StatelessWidget {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) =>
-                        RegisterScreen(), // Navigate to CustomerScreen
+                    builder: (context) => AuthScreen(counter: true),
                   ),
                 );
               },
-              child: Text('Register as Customer'), // Add a button for testing
+              child: Text('Log In as Counter'),
+            ),
+            SizedBox(height: 20.0),
+            ElevatedButton(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => RegisterScreen(userRole: 'customer'),
+                  ),
+                );
+              },
+              child: Text('Register as Customer'),
+            ),
+            SizedBox(height: 20.0),
+            ElevatedButton(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => RegisterScreen(userRole: 'counter'),
+                  ),
+                );
+              },
+              child: Text('Register as Counter'),
             ),
           ],
         ),

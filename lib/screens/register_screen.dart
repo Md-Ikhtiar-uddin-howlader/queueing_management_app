@@ -3,6 +3,10 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class RegisterScreen extends StatefulWidget {
+  final String userRole;
+
+  RegisterScreen({required this.userRole});
+
   @override
   _RegisterScreenState createState() => _RegisterScreenState();
 }
@@ -48,7 +52,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 String username = usernameController.text.trim();
                 String password = passwordController.text.trim();
                 String email = emailController.text.trim();
-                String userRole = 'customer';
 
                 try {
                   // Create user with Firebase Authentication
@@ -58,14 +61,14 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     password: password,
                   );
 
-                  // Create a document in the 'users' collection with the user UID
+                  // Create a document in the 'users' collection with the user UID and specified userRole
                   await _firestore
                       .collection('users')
                       .doc(userCredential.user!.uid)
                       .set({
                     'username': username,
                     'email': email,
-                    'userRole': userRole,
+                    'userRole': widget.userRole,
                   });
 
                   Navigator.pushReplacementNamed(context, '/home');

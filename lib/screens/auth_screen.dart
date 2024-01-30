@@ -5,13 +5,17 @@ import 'counter_screen.dart';
 import 'customer_screen.dart';
 
 class AuthScreen extends StatefulWidget {
+  final bool counter;
+
+  AuthScreen({required this.counter});
+
   @override
   _AuthScreenState createState() => _AuthScreenState();
 }
 
 class _AuthScreenState extends State<AuthScreen> {
   TextEditingController usernameController = TextEditingController();
-  String userUid = ''; // Add this line to store user UID
+  String userUid = '';
 
   @override
   Widget build(BuildContext context) {
@@ -43,18 +47,26 @@ class _AuthScreenState extends State<AuthScreen> {
                   userUid = userSnapshot.docs.first.id;
                   String userRole = userSnapshot.docs.first['userRole'];
 
-                  // Navigate to the appropriate screen based on the user's role
-                  if (userRole == 'counter') {
-                    Navigator.pushNamed(context, '/counter');
-                  } else if (userRole == 'customer') {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => CustomerScreen(userUid: userUid),
-                      ),
-                    );
+                  // Check if the userRole matches the expected role based on AuthScreen's counter property
+                  if ((widget.counter && userRole == 'counter') ||
+                      (!widget.counter && userRole == 'customer')) {
+                    // Navigate to the appropriate screen based on the user's role
+                    if (userRole == 'counter') {
+                      Navigator.pushNamed(context, '/counter');
+                    } else if (userRole == 'customer') {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) =>
+                              CustomerScreen(userUid: userUid),
+                        ),
+                      );
+                    } else {
+                      Navigator.pushNamed(context, '/home');
+                    }
                   } else {
-                    Navigator.pushNamed(context, '/home');
+                    // Incorrect user role, handle accordingly
+                    print('Incorrect user role');
                   }
                 } else {
                   // Username not found, handle accordingly
