@@ -19,65 +19,116 @@ class _RegisterScreenState extends State<RegisterScreen> {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
+  String errorMessage = '';
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text('Register'),
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            TextField(
-              controller: usernameController,
-              decoration: InputDecoration(labelText: 'Username'),
-            ),
-            SizedBox(height: 16.0),
-            TextField(
-              controller: passwordController,
-              decoration: InputDecoration(labelText: 'Password'),
-              obscureText: true,
-            ),
-            SizedBox(height: 16.0),
-            TextField(
-              controller: emailController,
-              decoration: InputDecoration(labelText: 'Email'),
-              keyboardType: TextInputType.emailAddress,
-            ),
-            SizedBox(height: 20.0),
-            ElevatedButton(
-              onPressed: () async {
-                String username = usernameController.text.trim();
-                String password = passwordController.text.trim();
-                String email = emailController.text.trim();
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              TextField(
+                controller: usernameController,
+                decoration: InputDecoration(labelText: 'Username'),
+              ),
+              SizedBox(height: 16.0),
+              TextField(
+                controller: passwordController,
+                decoration: InputDecoration(labelText: 'Password'),
+                obscureText: true,
+              ),
+              SizedBox(height: 16.0),
+              TextField(
+                controller: emailController,
+                decoration: InputDecoration(labelText: 'Email'),
+                keyboardType: TextInputType.emailAddress,
+              ),
+              SizedBox(height: 20.0),
+              ElevatedButton(
+                onPressed: () async {
+                  String username = usernameController.text.trim();
+                  String password = passwordController.text.trim();
+                  String email = emailController.text.trim();
 
-                try {
-                  // Create user with Firebase Authentication
-                  UserCredential userCredential =
-                      await _auth.createUserWithEmailAndPassword(
-                    email: email,
-                    password: password,
-                  );
+                  // Validate input fields
+                  if (username.isEmpty) {
+                    setState(() {
+                      errorMessage = 'Please fill in the username.';
+                    });
+                    return;
+                  }
+                  if (password.isEmpty) {
+                    setState(() {
+                      errorMessage = 'Please fill in the password.';
+                    });
+                    return;
+                  }
+                  if (email.isEmpty) {
+                    setState(() {
+                      errorMessage = 'Please fill in the email.';
+                    });
+                    return;
+                  }
 
-                  // Create a document in the 'users' collection with the user UID and specified userRole
-                  await _firestore
-                      .collection('users')
-                      .doc(userCredential.user!.uid)
-                      .set({
-                    'username': username,
-                    'email': email,
-                    'userRole': widget.userRole,
-                  });
-                  Navigator.pushReplacementNamed(context, '/home');
-                } catch (e) {
-                  print('Error during registration: $e');
-                }
-              },
-              child: Text('Register'),
-            ),
-          ],
+                  try {
+                    // Create user with Firebase Authentication
+                    UserCredential userCredential =
+                        await _auth.createUserWithEmailAndPassword(
+                      email: email,
+                      password: password,
+                    );
+
+                    // Create a document in the 'users' collection with the user UID and specified userRole
+                    await _firestore
+                        .collection('users')
+                        .doc(userCredential.user!.uid)
+                        .set({
+                      'username': username,
+                      'email': email,
+                      'userRole': widget.userRole,
+                    });
+
+                    // Show success message
+                    showDialog(
+                      context: context,
+                      builder: (context) => AlertDialog(
+                        title: Text('Registration Successful'),
+                        content: Text('You have successfully registered.'),
+                        actions: [
+                          TextButton(
+                            onPressed: () {
+                              Navigator.of(context).pop();
+                              Navigator.pushReplacementNamed(context, '/home');
+                            },
+                            child: Text('OK'),
+                          ),
+                        ],
+                      ),
+                    );
+                  } catch (e) {
+                    // Handle registration errors
+                    print('Error during registration: $e');
+                    setState(() {
+                      errorMessage = 'Registration failed. Please try again.';
+                    });
+                  }
+                },
+                child: Text('Register'),
+              ),
+              SizedBox(height: 16.0),
+              if (errorMessage.isNotEmpty)
+                Text(
+                  errorMessage,
+                  style: TextStyle(color: Colors.red),
+                ),
+            ],
+          ),
         ),
       ),
     );

@@ -47,71 +47,81 @@ class _AuthScreenState extends State<AuthScreen> {
               ),
               SizedBox(height: 20.0),
               ElevatedButton(
-                onPressed: () async {
-                  String username = usernameController.text.trim();
-                  String password = passwordController.text.trim();
-                  await FirebaseAuth.instance.signOut();
+  onPressed: () async {
+    String username = usernameController.text.trim();
+    String password = passwordController.text.trim();
+    await FirebaseAuth.instance.signOut();
 
-                  try {
-                    // Fetch user data based on username
-                    QuerySnapshot userSnapshot = await FirebaseFirestore
-                        .instance
-                        .collection('users')
-                        .where('username', isEqualTo: username)
-                        .limit(1)
-                        .get();
+    try {
+      // Fetch user data based on username
+      QuerySnapshot userSnapshot = await FirebaseFirestore
+          .instance
+          .collection('users')
+          .where('username', isEqualTo: username)
+          .limit(1)
+          .get();
 
-                    if (userSnapshot.docs.isNotEmpty) {
-                      String userEmail = userSnapshot.docs.first['email'];
+      if (userSnapshot.docs.isNotEmpty) {
+        String userEmail = userSnapshot.docs.first['email'];
 
-                      // Sign in with Firebase Authentication using email and password
-                      UserCredential userCredential = await FirebaseAuth
-                          .instance
-                          .signInWithEmailAndPassword(
-                        email: userEmail,
-                        password: password,
-                      );
+        // Sign in with Firebase Authentication using email and password
+        UserCredential userCredential = await FirebaseAuth
+            .instance
+            .signInWithEmailAndPassword(
+          email: userEmail,
+          password: password,
+        );
 
-                      userUid = userCredential.user!.uid;
-                      String userRole = userSnapshot.docs.first['userRole'];
+        userUid = userCredential.user!.uid;
+        String userRole = userSnapshot.docs.first['userRole'];
 
-                      // Check if the userRole matches the expected role based on AuthScreen's counter property
-                      if ((widget.counter && userRole == 'counter') ||
-                          (!widget.counter && userRole == 'customer')) {
-                        // Navigate to the appropriate screen based on the user's role
-                        if (userRole == 'counter') {
-                          Navigator.pushNamed(context, '/counter');
-                        } else if (userRole == 'customer') {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) =>
-                                  CustomerScreen(userUid: userUid),
-                            ),
-                          );
-                        }
-                        // No need for an else here because the previous conditions cover all possibilities.
-                      } else {
-                        // Incorrect user role, handle accordingly
-                        print('Incorrect user role');
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(
-                            content: Text('Incorrect user role'),
-                          ),
-                        );
-                        await FirebaseAuth.instance.signOut();
-                      }
-                    } else {
-                      // Username not found, handle accordingly
-                      print('Username not found');
-                    }
-                  } catch (e) {
-                    // Handle authentication errors
-                    print('Authentication error: $e');
-                  }
-                },
-                child: Text('Sign In'),
+        // Check if the userRole matches the expected role based on AuthScreen's counter property
+        if ((widget.counter && userRole == 'counter') ||
+            (!widget.counter && userRole == 'customer')) {
+          // Navigate to the appropriate screen based on the user's role
+          if (userRole == 'counter') {
+            Navigator.pushNamed(context, '/counter');
+          } else if (userRole == 'customer') {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) =>
+                    CustomerScreen(userUid: userUid),
               ),
+            );
+          }
+        } else {
+          // Incorrect user role, handle accordingly
+          print('Incorrect user role');
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text('Incorrect user role'),
+            ),
+          );
+          await FirebaseAuth.instance.signOut();
+        }
+      } else {
+        // Username not found, handle accordingly
+        print('Username not found');
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Username not found'),
+          ),
+        );
+      }
+    } catch (e) {
+      // Handle authentication errors
+      print('Authentication error: $e');
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Incorrect password'),
+        ),
+      );
+    }
+  },
+  child: Text('Sign In'),
+),
+
             ],
           ),
         ),
