@@ -166,7 +166,8 @@ Features: Initializes the app and sets up the initial screen or widget to be dis
 
 Screen Navigation (Routing):
 
-The screen navigation in the Queue Management App is orchestrated through a well-defined routing system. The MaterialApp widget in main.dart serves as the entry point for the application and manages the routes to different screens.![](https://lh7-us.googleusercontent.com/1osVVpmaBg9Yla2yk2GcfhSrDGCDd-WnYsa02aVqO4KHXINpNMs1yQyQiODx87LWNAEfbR-W_GSotncQaRZdAQn8Dx3LzCKqbKZAXUtSzQ4EtkbjstWromdOzWHHcELBaxAHS4sz7vTQ9OFL207FzN8)
+The screen navigation in the Queue Management App is orchestrated through a well-defined routing system. The MaterialApp widget in main.dart serves as the entry point for the application and manages the routes to different screens.
+![](https://lh7-us.googleusercontent.com/1osVVpmaBg9Yla2yk2GcfhSrDGCDd-WnYsa02aVqO4KHXINpNMs1yQyQiODx87LWNAEfbR-W_GSotncQaRZdAQn8Dx3LzCKqbKZAXUtSzQ4EtkbjstWromdOzWHHcELBaxAHS4sz7vTQ9OFL207FzN8)
 
 In this configuration:
 
@@ -212,7 +213,9 @@ These screens include the QR scanning functionality. The widget hierarchy would 
 
 the Counter Screen features an "Issue New Queue Number" button, enabling the counter to generate a fresh queue number for the upcoming customers. This innovative system enhances customer service by optimizing queue management. Alongside, the Counter Screen is equipped with the capability to generate QR codes for each issued queue number. This QR code serves as a convenient identification method for customers, facilitating easy scanning and tracking.
 
-5. **Sequence Diagram![](https://lh7-us.googleusercontent.com/alfL2uCGQg3ayFw7ImNXgaCQaEWjEdSyPSOWCTKVFH8_UvF8fTJ8rN6UFSpGlagvcpGMG5BJyGQQERpcm-ITXQ513erzRwWUKKoTzyVJkN8_BAWh8WJTLpWXWyMeeAfE6pUsjULKzTPfvLmIny65AZc)**
+5. **Sequence Diagram
+
+ ![](https://lh7-us.googleusercontent.com/alfL2uCGQg3ayFw7ImNXgaCQaEWjEdSyPSOWCTKVFH8_UvF8fTJ8rN6UFSpGlagvcpGMG5BJyGQQERpcm-ITXQ513erzRwWUKKoTzyVJkN8_BAWh8WJTLpWXWyMeeAfE6pUsjULKzTPfvLmIny65AZc)**
 
 6) **References**
 
