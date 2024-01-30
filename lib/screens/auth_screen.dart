@@ -6,6 +6,10 @@ import 'customer_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 class AuthScreen extends StatefulWidget {
+  final bool counter;
+
+  AuthScreen({required this.counter});
+
   @override
   _AuthScreenState createState() => _AuthScreenState();
 }
@@ -13,7 +17,7 @@ class AuthScreen extends StatefulWidget {
 class _AuthScreenState extends State<AuthScreen> {
   TextEditingController usernameController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
-  String userUid = ''; // Add this line to store user UID
+  String userUid = '';
 
   @override
   Widget build(BuildContext context) {
@@ -73,27 +77,39 @@ class _AuthScreenState extends State<AuthScreen> {
                       userUid = userCredential.user!.uid;
                       String userRole = userSnapshot.docs.first['userRole'];
 
-                      // Navigate to the appropriate screen based on the user's role
-                      if (userRole == 'counter') {
-                        Navigator.pushNamed(context, '/counter');
-                      } else if (userRole == 'customer') {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) =>
-                                CustomerScreen(userUid: userUid),
+                      // Check if the userRole matches the expected role based on AuthScreen's counter property
+                      if ((widget.counter && userRole == 'counter') ||
+                          (!widget.counter && userRole == 'customer')) {
+                        // Navigate to the appropriate screen based on the user's role
+                        if (userRole == 'counter') {
+                          Navigator.pushNamed(context, '/counter');
+                        } else if (userRole == 'customer') {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) =>
+                                  CustomerScreen(userUid: userUid),
+                            ),
+                          );
+                        }
+                        // No need for an else here because the previous conditions cover all possibilities.
+                      } else {
+                        // Incorrect user role, handle accordingly
+                        print('Incorrect user role');
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            content: Text('Incorrect user role'),
                           ),
                         );
-                      } else {
-                        Navigator.pushNamed(context, '/home');
+                        await FirebaseAuth.instance.signOut();
                       }
                     } else {
                       // Username not found, handle accordingly
                       print('Username not found');
                     }
                   } catch (e) {
-                    // Handle sign-in errors
-                    print('Error during sign-in: $e');
+                    // Handle authentication errors
+                    print('Authentication error: $e');
                   }
                 },
                 child: Text('Sign In'),
@@ -108,7 +124,7 @@ class _AuthScreenState extends State<AuthScreen> {
   @override
   void dispose() {
     usernameController.dispose();
-    passwordController.dispose();
+    passwordController.dispose(); // Dispose of the password controller as well
     super.dispose();
   }
 }
