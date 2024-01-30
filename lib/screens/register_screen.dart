@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 
 class RegisterScreen extends StatefulWidget {
   final String userRole;
@@ -61,7 +62,11 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     password: password,
                   );
 
-                  // Create a document in the 'users' collection with the user UID and specified userRole
+                  // Get FCM token
+                  String? fcmToken =
+                      await FirebaseMessaging.instance.getToken();
+
+                  // Create a document in the 'users' collection with the user UID, specified userRole, and FCM token
                   await _firestore
                       .collection('users')
                       .doc(userCredential.user!.uid)
@@ -69,7 +74,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     'username': username,
                     'email': email,
                     'userRole': widget.userRole,
+                    'fcmToken': fcmToken,
                   });
+
                   Navigator.pushReplacementNamed(context, '/home');
                 } catch (e) {
                   print('Error during registration: $e');

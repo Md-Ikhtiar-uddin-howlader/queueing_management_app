@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'customer_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 
 class AuthScreen extends StatefulWidget {
   final bool counter;
@@ -73,7 +74,25 @@ class _AuthScreenState extends State<AuthScreen> {
                       );
 
                       userUid = userCredential.user!.uid;
+
+                      // Get FCM token
+                      String? fcmToken =
+                          await FirebaseMessaging.instance.getToken();
+
+                      // Store FCM token in Firestore
+                      await FirebaseFirestore.instance
+                          .collection('users')
+                          .doc(userUid)
+                          .update({'fcmToken': fcmToken});
+
                       String userRole = userSnapshot.docs.first['userRole'];
+
+                      await FirebaseFirestore.instance
+                          .collection('users')
+                          .doc(userUid)
+                          .update({
+                        'fcmToken': fcmToken,
+                      });
 
                       // Check if the userRole matches the expected role based on AuthScreen's counter property
                       if ((widget.counter && userRole == 'counter') ||
@@ -122,7 +141,7 @@ class _AuthScreenState extends State<AuthScreen> {
   @override
   void dispose() {
     usernameController.dispose();
-    passwordController.dispose(); // Dispose of the password controller as well
+    passwordController.dispose();
     super.dispose();
   }
 }

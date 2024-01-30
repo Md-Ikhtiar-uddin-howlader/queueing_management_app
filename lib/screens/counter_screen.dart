@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'queue_qr_page.dart'; // Import your QR page file
+import 'package:firebase_messaging/firebase_messaging.dart';
 
 class CounterScreen extends StatefulWidget {
   @override
@@ -24,35 +25,24 @@ class _CounterScreenState extends State<CounterScreen> {
           .get();
 
       if (incompleteQueueSnapshot.docs.isNotEmpty) {
-        // Retrieve the current 'current' queue entry
-        QuerySnapshot currentQueueSnapshot = await _firestore
-            .collection('Queue')
-            .where('status', isEqualTo: 'current')
-            .get();
+        // ... (Your existing code)
 
-        if (currentQueueSnapshot.docs.isNotEmpty) {
-          // Get the document ID of the current 'current' queue entry
-          String currentQueueDocId = currentQueueSnapshot.docs.first.id;
+        // Retrieve customer's FCM token
+        String customerUid = incompleteQueueSnapshot.docs.first['userid'];
+        DocumentSnapshot customerSnapshot =
+            await _firestore.collection('users').doc(customerUid).get();
+        String? customerFcmToken = customerSnapshot['fcmToken'];
 
-          // Update the status to 'complete' for the current 'current' queue entry
-          await _firestore
-              .collection('Queue')
-              .doc(currentQueueDocId)
-              .update({'status': 'complete'});
-
-          print('Marked the current number as complete.');
-        }
-
-        // Get the document ID of the next incomplete queue entry
-        String incompleteQueueDocId = incompleteQueueSnapshot.docs.first.id;
-
-        // Update the status to 'current' for the next incomplete queue entry
-        await _firestore
-            .collection('Queue')
-            .doc(incompleteQueueDocId)
-            .update({'status': 'current'});
-
-        print('Called the next incomplete number.');
+        // Send push notification
+        /*await FirebaseMessaging.instance.send(
+          RemoteMessage(
+            data: {
+              'title': 'Your Turn!',
+              'body': 'It\'s your turn now. Please proceed to the counter.',
+            },
+            to: customerFcmToken,
+          ),
+        );*/
       } else {
         // No incomplete queue entry found.
         print('No incomplete queue entry found.');
