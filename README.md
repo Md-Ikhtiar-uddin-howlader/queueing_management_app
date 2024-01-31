@@ -34,6 +34,16 @@
 
 
 
+| Task Distribution:            |                                                          |
+| ----------------------------- | -------------------------------------------------------- |
+| Name                          | Task                                                     |
+| MD IKHTIAR UDDIN HOWLADER     | Routing, home page, registration page, authentication    |
+| MUHAMMAD 'AFFIF BIN BIN RUSLI | firebase configuration, Push notification                |
+| AMIERUL SYAHMI BIN MOHD HASBI | Counter page, queue management, dynamic & static qr code |
+| DIMYATI AGUNG NABHAN          | customer page, queue management                          |
+
+
+
 1. **Introduction**
 
 Our project of Queue Management App, providing an in-depth exploration of an innovative mobile application built using the Flutter framework. This application redefines the traditional queue management system by incorporating cutting-edge technologies, such as QR codes and real-time Firebase Firestore integration. The primary objective is to create a seamless and efficient experience for both customers and counters, optimizing the overall queueing process.
