@@ -13,8 +13,6 @@ class _QRScannerPageState extends State<QRScannerPage> {
   late QRViewController controller;
   bool isQueueJoined = false; // Flag to track whether the queue has been joined
 
-  // Use a fixed customer ID for demonstration purposes
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -36,7 +34,7 @@ class _QRScannerPageState extends State<QRScannerPage> {
               ),
             ),
           ),
-        ], // <- Close the Column here
+        ],
       ),
     );
   }
@@ -118,7 +116,7 @@ class _QRScannerPageState extends State<QRScannerPage> {
         await FirebaseFirestore.instance.collection('Queue').add({
           'queue': lastQueueValue,
           'userid': customerUid, // Use the UID as the customer ID
-          'status': 'incomplete', // Set an initial status, adjust as needed
+          'status': 'incomplete', // Set an initial status of "incomplete"
           'timestamp': currentTime,
         });
 
@@ -126,7 +124,6 @@ class _QRScannerPageState extends State<QRScannerPage> {
 
         // Close the QR scanner page and go back to the previous screen
         Navigator.pop(context);
-        // TODO: Implement notifications for customers when their turn comes
       } else {
         // User not authenticated, handle accordingly
         _showSnackbar('Error: User not authenticated.');

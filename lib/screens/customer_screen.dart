@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'qr_scanner_page.dart'; // Import your QR page file
+import 'qr_scanner_page.dart';
 import 'dynamic_qr_scanner_page.dart';
 
 class CustomerScreen extends StatefulWidget {

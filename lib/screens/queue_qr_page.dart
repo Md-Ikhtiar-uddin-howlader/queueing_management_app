@@ -67,7 +67,7 @@ class _QueueQRPageState extends State<QueueQRPage> {
         return latestQueueNumber + 1;
       } else {
         print('No queue number found.');
-        return 1; // Default value if no queue number is found (you may adjust this based on your requirements)
+        return 1; // Default value if no queue number is found
       }
     } catch (error) {
       print('Error fetching latest queue number: $error');

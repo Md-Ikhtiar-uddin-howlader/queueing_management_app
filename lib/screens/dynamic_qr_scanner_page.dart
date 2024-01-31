@@ -113,8 +113,6 @@ class _DynamicQRScannerPageState extends State<DynamicQRScannerPage> {
 
         // Reset isQueueJoined to allow scanning a new QR code
         isQueueJoined = false;
-
-        // TODO: Implement notifications for customers
       }
     } catch (error) {
       print('Error assigning queue to user: $error');
