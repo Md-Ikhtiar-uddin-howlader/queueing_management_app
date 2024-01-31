@@ -24,7 +24,7 @@
 
  
 
-
+|                                               |
 | ----------------------------- | ------------- |
 | Name                          | Matric number |
 | MD IKHTIAR UDDIN HOWLADER     | 1834619       |
@@ -32,7 +32,7 @@
 | AMIERUL SYAHMI BIN MOHD HASBI | 2016973       |
 | DIMYATI AGUNG NABHAN          | 1929465       |
 
-| Task Distribution: 
+| Task Distribution:                                                                       |
 | ----------------------------- | -------------------------------------------------------- |
 | Name                          | Task                                                     |
 | MD IKHTIAR UDDIN HOWLADER     | Routing, home page, registration page, authentication    |
