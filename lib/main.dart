@@ -1,18 +1,17 @@
 import 'package:flutter/material.dart';
 import 'screens/home_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
 import 'firebase_options.dart';
-import 'package:queueing_management_app/screens/customer_screen.dart'; // Import the CustomerScreen
-import 'package:queueing_management_app/screens/counter_screen.dart'; // Import the CustomerScreen
+import 'services/firebase_service.dart';
+import 'screens/customer_screen.dart'; // Import the CustomerScreen
+import 'screens/counter_screen.dart'; // Import the CustomerScreen
+
+final navigatorKey = GlobalKey<NavigatorState>();
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
-
-  // Get FCM token
-  String? fcmToken = await FirebaseMessaging.instance.getToken();
-  print('FCM Token: $fcmToken');
+  await FirebaseService().initFirebaseMessaging();
 
   runApp(const MyApp());
 }

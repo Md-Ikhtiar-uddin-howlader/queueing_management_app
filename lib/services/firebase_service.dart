@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:queueing_management_app/main.dart';
 
 class FirebaseService {
   final FirebaseAuth _auth = FirebaseAuth.instance;
@@ -28,31 +29,29 @@ class FirebaseService {
   }
 
   Future<void> initFirebaseMessaging() async {
-    await _firebaseMessaging.requestPermission(
-      sound: true,
-      badge: true,
-      alert: true,
-    );
+    await _firebaseMessaging.requestPermission();
+
     _firebaseMessaging.getToken().then((token) {
-      print('FCM Token: $token');
+      print('Firebase Messaging Token: $token');
     });
 
-    FirebaseMessaging.onMessage.listen((RemoteMessage message) {
-      print('Received message: ${message.notification?.body}');
-      // Handle foreground messages here
-    });
-
-    FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
-      print('Message opened app: ${message.notification?.body}');
-      // Handle messages that were received while the app was in the background and opened by the user
-    });
-
-    FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
+    initPushNotifications();
   }
 
-  Future<void> _firebaseMessagingBackgroundHandler(
-      RemoteMessage message) async {
-    print('Handling a background message: ${message.notification?.body}');
-    // Handle background messages here
+  void handleMessage(RemoteMessage? message) {
+    if (message == null) return;
+
+    navigatorKey.currentState?.pushNamed(
+      '/customer',
+      arguments: message,
+    );
+  }
+
+  Future initPushNotifications() async {
+    FirebaseMessaging.instance.getInitialMessage().then(handleMessage);
+
+    FirebaseMessaging.onMessage.listen(handleMessage);
+
+    FirebaseMessaging.onMessageOpenedApp.listen(handleMessage);
   }
 }
