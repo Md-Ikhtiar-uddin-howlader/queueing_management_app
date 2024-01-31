@@ -32,13 +32,7 @@
 | AMIERUL SYAHMI BIN MOHD HASBI | 2016973       |
 | DIMYATI AGUNG NABHAN          | 1929465       |
 
-| Task Distribution:                                                                       |
-| ----------------------------- | -------------------------------------------------------- |
-| Name                          | Task                                                     |
-| MD IKHTIAR UDDIN HOWLADER     | Routing, home page, registration page, authentication    |
-| MUHAMMAD 'AFFIF BIN BIN RUSLI | firebase configuration, Push notification                |
-| AMIERUL SYAHMI BIN MOHD HASBI | Counter page, queue management, dynamic & static qr code |
-| DIMYATI AGUNG NABHAN          | customer page, queue management                          |
+
 
 1. **Introduction**
 
